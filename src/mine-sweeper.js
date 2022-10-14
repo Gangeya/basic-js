@@ -23,11 +23,41 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  let width = matrix[0].length;
+  let height = matrix.length;
+  matrix = matrix.flat();
+  let result = [];
+
+  for (let i = 0; i < width * height; i++) {
+    let count = 0;
+    const isLeft = i % width === 0;
+    const isRight = i % width === width - 1;
+    if (i > 0 && !isLeft && matrix[i - 1] === true) count++; //запад
+    if (i > width - 1 && !isRight && matrix[i + 1 - width] === true) count++; //северо-восток
+    if (!isRight && matrix[i + 1] === true) count++; //восток
+    if (
+      i < width * height - width - 1 &&
+      !isRight &&
+      matrix[i + 1 + width] === true
+    )
+      count++; //юго-восток
+    if (i > width - 1 && matrix[i - width] === true) count++; //север
+    if (i > width && !isLeft && matrix[i - 1 - width] === true) count++; //северо-запад
+    if (i < width * height - width && !isLeft && matrix[i - 1 + width] === true)
+      count++; //юго-запад
+    if (i < width - 1 && matrix[i + width] === true) count++; //юг
+    result[i] = count;
+    console.log(result[i]);
+  }
+  let arr = [];
+  for (let i = 0; i < height; i++) {
+    arr[i] = result.slice(i * width, i * width + width);
+  }
+  //console.log(arr);
+  return arr;
 }
 
 module.exports = {
-  minesweeper
+  minesweeper,
 };
